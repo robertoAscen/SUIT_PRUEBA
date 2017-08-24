@@ -1,0 +1,7 @@
+Device: MSP430FE4252
+Interface: USB
+Password: N/A
+File: Loader.hex
+Erase Type: ERASE_ALL
+Verification: TRUE
+VCC: ON

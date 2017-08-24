@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.eneri</groupId>
+    <artifactId>TESTROOM</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <build> 
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin> 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.4</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>        
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.4.3</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <transformers>
+                        <transformer
+                            implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                            <mainClass>com.eneri.testroom.ui.Launcher</mainClass>
+                        </transformer>
+                    </transformers>
+                    <filters>
+                        <filter>
+                            <artifact>*:*</artifact>
+                            <excludes>
+                                <exclude>META-INF/*.SF</exclude>
+                                <exclude>META-INF/*.DSA</exclude>
+                                <exclude>META-INF/*.RSA</exclude>
+                                <exclude>META-INF/*.EC</exclude> 
+                            </excludes>
+                        </filter>
+                    </filters>
+                </configuration>
+            </plugin>       
+                <plugin>
+                    <groupId>com.akathist.maven.plugins.launch4j</groupId>
+                    <artifactId>launch4j-maven-plugin</artifactId>
+                    <version>1.7.11</version>
+                    <executions>
+                        <execution>
+                            <id>l4j-clui</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>launch4j</goal>
+                            </goals>
+                            <configuration> 
+                            <!--indicar gui (javaw) o console (java) -->
+                            <headerType>gui</headerType>
+                            <outfile>${project.build.directory}/Suite_for_test.exe</outfile> 
+                            <classPath>
+                                <mainClass>com.eneri.testroom.ui.Launcher</mainClass>
+                                <!-- la ruta absoluta en la que tendremos las dependencias -->
+                                <!-- %EXEDIR% es la variable que indica el directorio en el que
+                                se está ejectando el .exe -->
+                                <jarLocation>%EXEDIR%/lib/</jarLocation>
+                            </classPath>
+                            <!-- icono del ejecutable -->
+                            <icon>src/main/resources/Image/test.ico</icon>
+                            <!-- impide ejecutar más de una instancia a la vez -->
+                            <singleInstance>
+                                <mutexName>Suite_for_test</mutexName>
+                            </singleInstance> 
+                            <jre><!-- versión mínima requerida de java -->
+                                <minVersion>1.7.0</minVersion>
+                            </jre>
+                            <!-- metadatos Windows del .exe-->
+                            <versionInfo>
+                                <fileVersion>1.0.0.0</fileVersion>
+                                <txtFileVersion>versión 1.0</txtFileVersion>
+                                <fileDescription>demo de launch4j</fileDescription>
+                                <copyright>RobertoA.com</copyright>
+                                <productVersion>1.0.0.0</productVersion>
+                                <txtProductVersion>demo de launch4j</txtProductVersion>
+                                <productName>demo de launch4j</productName>                             
+                                <internalName>Suite_for_test</internalName>
+                                <originalFilename>Suite_for_test.exe</originalFilename>
+                            </versionInfo> 
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin> 
+        </plugins> 
+    </build> 
+    <dependencies>
+        <dependency>
+            <groupId>org.scream3r</groupId>
+            <artifactId>jssc</artifactId>
+            <version>2.8.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <version>2.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bidib.jbidib.org.qbang.rxtx</groupId>
+            <artifactId>rxtxcomm</artifactId>
+            <version>2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.10</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.21</version>
+        </dependency>
+    </dependencies>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+</project>
